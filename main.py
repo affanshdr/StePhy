@@ -4,9 +4,11 @@ import pandas as pd
 from Missing_value import missing_value_handler
 from Missing_value import missing_value_table
 from Data_Insight import Data_Information
+from Feature_Handler import feature_encoding 
 
 if __name__ == "__main__":
     st.set_page_config(layout="wide", page_title="StePhy", page_icon= "./Assets/Logo_tunggal.png")
+    st.cache_resource.clear()
 
     # Sidebar
     st.sidebar.markdown("# StePhy")
@@ -26,6 +28,7 @@ if __name__ == "__main__":
         with col2:
 
             # Upload CSV
+
             uploaded_file = st.file_uploader("Upload your dataset", type=['csv', 'txt'])
 
 
@@ -86,10 +89,26 @@ if __name__ == "__main__":
                 except Exception as e:
                     st.error(f"Error loading file: {str(e)}")
                     st.info("Try selecting separator manually or check file format")
+
+                # Step 0
+                # Data Preparation
+                # Ambil Kolom Kategori
+                categorical_cols = [i for i in st.session_state.get('df_upload') if st.session_state.get('df_upload')[i].dtype in ['object']]
+
+                #Ambil kolom numerik
+                numerical_cols = [i for i in st.session_state.get('df_upload') if st.session_state.get('df_upload')[i].dtype in ['int64', 'float64']]
+
+                row_count = st.session_state.get('df_upload').shape[0]
+                col_count = st.session_state.get('df_upload').shape[1]
+
+
                     
                 # Step 1
                 # Data Information
-                Data_Information(st.session_state.get('df_upload'))
+                Data_Information(st.session_state.get('df_upload'), categorical_cols, numerical_cols)
+
+                # Step 2 
+                # Missing Value
                 
                 if 'df_missing_value' not in st.session_state or \
                    'last_uploaded_file' not in st.session_state or \
@@ -99,17 +118,29 @@ if __name__ == "__main__":
                     # Reset history kolom missing saat upload baru
                     if 'cols_with_missing_history' in st.session_state:
                         del st.session_state['cols_with_missing_history']
-
-                # Step 2 
-                # Missing Value 
+ 
                 missing_value_table(st.session_state['df_missing_value'])
 
                 # Step3
-                testing = st.session_state['df_missing_value'].copy()
-                test = [col for col in testing.columns if testing[col].isnull().sum() > 0]
-            
-            
+                # Feature Engineering
+                Encoding = st.session_state['df_missing_value'].copy()
+
                 
-            
+                feature_encoding(Encoding, categorical_cols, row_count)
+
+                df_encoded = st.session_state.get("Feature_Encoding")
+
+                st.dataframe(
+                    df_encoded.head(10),
+                    use_container_width=True
+                )
+
+                st.download_button(
+                    label="Download Preprocessed Data",
+                    data=df_encoded.to_csv(index=False),
+                    file_name="preprocessed_data.csv",
+                    mime="text/csv"
+                )
+
                 with col3:
                     st.write("")

@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 
 
-def Data_Information(df):
+def Data_Information(df, categorical_cols, numerical_cols): 
     
                 # Display metrics
                 col1, col2, col3 = st.columns(3)
@@ -14,17 +14,16 @@ def Data_Information(df):
                     st.metric("Memory", f"{df.memory_usage(deep=True).sum() / 1024**2:.2f} MB")
                     
 
-                # Show column list
-                with st.expander("📋 Column List"):
-                    st.write(df.columns.tolist())
+                # Show categorical and numerical columns
+                with st.expander("📊 Numerical Columns"): 
+                    for i in numerical_cols:
+                        st.write(f"- {i}")
 
 
                 # Show categorical and numerical columns
-                numerik_cols = df[[i for i in df.columns if df[i].dtype in ['int64', 'float64']]].columns
-                kategorik_cols = df[[i for i in df.columns if df[i].dtype in ['object']]].columns
-                st.expander("📊 Numerical Columns").write(numerik_cols)
-                st.expander("📊 Categorical Columns").write(kategorik_cols)
-                        
+                with st.expander("📊 Categorical Columns"): 
+                    for i in categorical_cols:
+                        st.write(f"- {i}")
                     
                 
                 # Display dataframe dengan grid jelas

@@ -115,7 +115,6 @@ def missing_value_table(df):
 
 
             Final = st.session_state['df_missing_value'].copy()
-    
 
             st.dataframe(
                 Final.head(10),
