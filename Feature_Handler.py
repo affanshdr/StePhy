@@ -18,8 +18,6 @@ def cardinality_check(categorical_cols, row_count, df):
 
     return low, high
 
-
-
 # 2. RANDOM EMBEDDING GENERATOR
 def random_embedding(df, column, dim=8, seed=42):
     np.random.seed(seed)
@@ -34,7 +32,6 @@ def random_embedding(df, column, dim=8, seed=42):
     return embed_df
 
 
-
 # 3. FEATURE ENCODING STREAMLIT
 def feature_encoding(df, categorical_cols, row_count):
     st.subheader("Feature Encoding")
@@ -47,7 +44,6 @@ def feature_encoding(df, categorical_cols, row_count):
         categorical_cols, row_count, df
     )
 
-    # Info tampilan
     col1, col2 = st.columns(2)
     with col1:
         st.success("Low Cardinality")
@@ -96,7 +92,6 @@ def feature_encoding(df, categorical_cols, row_count):
 
 
         # HIGH CARDINALITY
-  
         high_encoded_list = []
         for col in high_cardinality:
             emb_df = random_embedding(df, col, dim=8)
@@ -104,16 +99,12 @@ def feature_encoding(df, categorical_cols, row_count):
 
         df_high_emb = pd.concat(high_encoded_list, axis=1) if high_encoded_list else pd.DataFrame()
 
-        # GABUNGKAN SEMUA
-
+        # GABUNGKAN
         df_final = pd.concat([df_numeric, low_encoded, df_high_emb], axis=1)
-
         st.success("Encoding Completed!")
         st.session_state["Feature_Encoding"] = df_final.copy()
-
         df_encoded = st.session_state.get("Feature_Encoding")
         st.dataframe(df_encoded.head(10), use_container_width=True )
-
 
         st.download_button(
                     label="Download Preprocessed Data",

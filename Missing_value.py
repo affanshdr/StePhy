@@ -16,20 +16,18 @@ def missing_value_handler(col_series, option):
         filled_series = col_series.copy()
     return filled_series
 
-
 def missing_value_table(df):
     if df is None:
         st.warning("Data belum tersedia untuk penanganan missing value.")
         return
-
-    # Hitung SEMUA kolom yang PERNAH punya missing value
-    # Simpan di session state untuk tracking
+    
+    # session state untuk tracking
     if 'original_missing_cols' not in st.session_state:
         st.session_state['original_missing_cols'] = [
             col for col in df.columns if df[col].isnull().sum() > 0
         ]
     
-    # Jika tidak ada missing value sama sekali dari awal
+    # Kalo tidak ada missing Value
     if len(st.session_state['original_missing_cols']) == 0:
         st.success("No missing value detected")
         return
@@ -38,7 +36,6 @@ def missing_value_table(df):
     
     with st.expander("🚨 Missing Value Status", expanded=True):
 
-        # Cek berapa kolom yang masih missing
         current_missing = [col for col in df.columns if df[col].isnull().sum() > 0]
         total_cols = len(st.session_state['original_missing_cols'])
         processed_cols = total_cols - len(current_missing)
@@ -60,7 +57,7 @@ def missing_value_table(df):
 
         # Loop SEMUA kolom yang pernah punya missing value
         for col_name in st.session_state['original_missing_cols']:
-            # Cek apakah kolom ini masih ada missing value
+
             missing_count = df[col_name].isnull().sum()
             is_clean = missing_count == 0
             
@@ -78,7 +75,6 @@ def missing_value_table(df):
             with col3:
                 if not is_clean:
 
-                    # Kalo ada Missing
                     if df[col_name].dtype in ['int64', 'float64']:
                         action = st.selectbox(
                             "Method",
@@ -109,7 +105,7 @@ def missing_value_table(df):
             
             st.divider()
         
-        # Summary di bawah
+        # Summary
         if len(current_missing) == 0:
             st.success("🎉 All missing values have been handled!")
 

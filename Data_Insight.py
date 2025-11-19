@@ -4,7 +4,6 @@ import pandas as pd
 
 def Data_Information(df, categorical_cols, numerical_cols): 
     
-                # Display metrics
                 col1, col2, col3 = st.columns(3)
                 with col1:
                     st.metric("Rows", df.shape[0])
@@ -13,19 +12,15 @@ def Data_Information(df, categorical_cols, numerical_cols):
                 with col3:
                     st.metric("Memory", f"{df.memory_usage(deep=True).sum() / 1024**2:.2f} MB")
                     
-
                 # Show categorical and numerical columns
                 with st.expander("📊 Numerical Columns"): 
                     for i in numerical_cols:
                         st.write(f"- {i}")
 
-
-                # Show categorical and numerical columns
                 with st.expander("📊 Categorical Columns"): 
                     for i in categorical_cols:
                         st.write(f"- {i}")
                     
-                
                 # Display dataframe dengan grid jelas
                 st.dataframe(
                     df.head(10),

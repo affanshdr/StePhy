@@ -14,7 +14,6 @@ if __name__ == "__main__":
     st.sidebar.markdown("# StePhy")
     st.sidebar.markdown("---")
 
-
     with st.container():
         st.markdown("<h1 style='text-align: center;'>Data Preprocessing</h1>", unsafe_allow_html=True)
 
@@ -23,19 +22,16 @@ if __name__ == "__main__":
         with col1:
             st.write("")
 
-
         # Main 
         with col2:
 
             # Upload CSV
-
             uploaded_file = st.file_uploader("Upload your dataset", type=['csv', 'txt'])
-
 
             if uploaded_file is not None:
                 st.success("File uploaded successfully")
-                # Auto-detect separator atau manual
 
+                # Auto-detect separator atau manual
                 col1, col2 = st.columns(2)
                 with col1:
                     auto_detect = st.checkbox("Auto-detect separator", value=True)
@@ -58,7 +54,7 @@ if __name__ == "__main__":
                                     max_cols = temp_df.shape[1]
                                     best_df = temp_df
                                     best_sep = sep
-                                uploaded_file.seek(0)  # Reset file pointer
+                                uploaded_file.seek(0)  
                             except:
                                 uploaded_file.seek(0)
                                 continue
@@ -82,7 +78,6 @@ if __name__ == "__main__":
 
                     st.subheader("Data Preview")
 
-                    
                     # Save Session
                     st.session_state['df_upload'] = df.copy()
                 
@@ -101,8 +96,6 @@ if __name__ == "__main__":
                 row_count = st.session_state.get('df_upload').shape[0]
                 col_count = st.session_state.get('df_upload').shape[1]
 
-
-                    
                 # Step 1
                 # Data Information
                 Data_Information(st.session_state.get('df_upload'), categorical_cols, numerical_cols)
@@ -124,12 +117,7 @@ if __name__ == "__main__":
                 # Step3
                 # Feature Engineering
                 Encoding = st.session_state['df_missing_value'].copy()
-
-                
                 feature_encoding(Encoding, categorical_cols, row_count)
-
-                df_encoded = st.session_state.get("Feature_Encoding")
-
 
                 with col3:
                     st.write("")
