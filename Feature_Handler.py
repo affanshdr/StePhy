@@ -3,9 +3,9 @@ import pandas as pd
 import numpy as np
 from sklearn.preprocessing import OneHotEncoder, LabelEncoder
 
-# ---------------------------
+
 # 1. CEK CARDINALITY
-# ---------------------------
+
 def cardinality_check(categorical_cols, row_count, df):
     high = []
     low = []
@@ -19,9 +19,8 @@ def cardinality_check(categorical_cols, row_count, df):
     return low, high
 
 
-# ---------------------------
+
 # 2. RANDOM EMBEDDING GENERATOR
-# ---------------------------
 def random_embedding(df, column, dim=8, seed=42):
     np.random.seed(seed)
 
@@ -35,9 +34,8 @@ def random_embedding(df, column, dim=8, seed=42):
     return embed_df
 
 
-# ---------------------------
+
 # 3. FEATURE ENCODING STREAMLIT
-# ---------------------------
 def feature_encoding(df, categorical_cols, row_count):
     st.subheader("Feature Encoding")
 
@@ -84,9 +82,9 @@ def feature_encoding(df, categorical_cols, row_count):
         numeric_cols = df.select_dtypes(include=['int64', 'float64']).columns
         df_numeric = df[numeric_cols]
 
-        # ----------------------
+
         # LOW CARDINALITY
-        # ----------------------
+   
         if low_method == "One-Hot Encoding":
             ohe = OneHotEncoder(handle_unknown="ignore", sparse_output=False)
             low_encoded = pd.DataFrame(
@@ -96,9 +94,9 @@ def feature_encoding(df, categorical_cols, row_count):
         else:
             low_encoded = df[low_cardinality].apply(LabelEncoder().fit_transform)
 
-        # ----------------------
+
         # HIGH CARDINALITY
-        # ----------------------
+  
         high_encoded_list = []
         for col in high_cardinality:
             emb_df = random_embedding(df, col, dim=8)
@@ -106,13 +104,23 @@ def feature_encoding(df, categorical_cols, row_count):
 
         df_high_emb = pd.concat(high_encoded_list, axis=1) if high_encoded_list else pd.DataFrame()
 
-        # ----------------------
         # GABUNGKAN SEMUA
-        # ----------------------
+
         df_final = pd.concat([df_numeric, low_encoded, df_high_emb], axis=1)
 
         st.success("Encoding Completed!")
         st.session_state["Feature_Encoding"] = df_final.copy()
+
+        df_encoded = st.session_state.get("Feature_Encoding")
+        st.dataframe(df_encoded.head(10), use_container_width=True )
+
+
+        st.download_button(
+                    label="Download Preprocessed Data",
+                    data=df_encoded.to_csv(index=False),
+                    file_name="preprocessed_data.csv",
+                    mime="text/csv"
+                )
 
         return df_final
 

@@ -130,17 +130,6 @@ if __name__ == "__main__":
 
                 df_encoded = st.session_state.get("Feature_Encoding")
 
-                st.dataframe(
-                    df_encoded.head(10),
-                    use_container_width=True
-                )
-
-                st.download_button(
-                    label="Download Preprocessed Data",
-                    data=df_encoded.to_csv(index=False),
-                    file_name="preprocessed_data.csv",
-                    mime="text/csv"
-                )
 
                 with col3:
                     st.write("")
