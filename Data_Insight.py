@@ -27,4 +27,10 @@ def Data_Information(df, categorical_cols, numerical_cols):
                     use_container_width=True,
                 )
 
+                st.write("")
+                st.write("")
+                st.divider()
+                st.write("")
+                st.write("")
+
                 

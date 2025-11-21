@@ -5,7 +5,6 @@ from sklearn.preprocessing import OneHotEncoder, LabelEncoder
 
 
 # 1. CEK CARDINALITY
-
 def cardinality_check(categorical_cols, row_count, df):
     high = []
     low = []
@@ -112,6 +111,7 @@ def feature_encoding(df, categorical_cols, row_count):
                     file_name="preprocessed_data.csv",
                     mime="text/csv"
                 )
+        
 
         return df_final
 

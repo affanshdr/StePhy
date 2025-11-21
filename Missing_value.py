@@ -17,6 +17,7 @@ def missing_value_handler(col_series, option):
     return filled_series
 
 def missing_value_table(df):
+    
     if df is None:
         st.warning("Data belum tersedia untuk penanganan missing value.")
         return

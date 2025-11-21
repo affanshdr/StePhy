@@ -5,14 +5,15 @@ from Missing_value import missing_value_handler
 from Missing_value import missing_value_table
 from Data_Insight import Data_Information
 from Feature_Handler import feature_encoding 
+from Scaler import Normalize
 
 if __name__ == "__main__":
     st.set_page_config(layout="wide", page_title="StePhy", page_icon= "./Assets/Logo_tunggal.png")
     st.cache_resource.clear()
 
     # Sidebar
-    st.sidebar.markdown("# StePhy")
-    st.sidebar.markdown("---")
+    # st.sidebar.markdown("# StePhy")
+    # st.sidebar.markdown("---")
 
     with st.container():
         st.markdown("<h1 style='text-align: center;'>Data Preprocessing</h1>", unsafe_allow_html=True)
@@ -118,6 +119,15 @@ if __name__ == "__main__":
                 # Feature Engineering
                 Encoding = st.session_state['df_missing_value'].copy()
                 feature_encoding(Encoding, categorical_cols, row_count)
+
+
+                df_encoded = st.session_state.get("Feature_Encoding")
+
+                # Step4
+                # Normalize
+                Normalize(df_encoded, numerical_cols)
+
+
 
                 with col3:
                     st.write("")
